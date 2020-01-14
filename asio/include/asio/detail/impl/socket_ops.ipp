@@ -41,6 +41,10 @@
 #endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
        // || defined(__MACH__) && defined(__APPLE__)
 
+#ifdef ESP_PLATFORM
+#include <lwip/if_api.h>
+#endif
+
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
