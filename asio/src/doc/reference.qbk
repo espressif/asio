@@ -6107,6 +6107,11 @@ The async\_compose function simplifies the implementation of composed asynchrono
 ]
 
 
+[heading Per-Operation Cancellation]
+  
+By default, terminal per-operation cancellation is enabled for composed operations that are implemented using `async_compose`. To disable cancellation for the composed operation, or to alter its supported cancellation types, call the `self` object's `reset_cancellation_state` function.
+
+
 [heading Example:]
   
 
@@ -101226,7 +101231,7 @@ The [link asio.reference.experimental__co_composed `experimental::co_composed`] 
 
 [heading Per-Operation Cancellation]
   
-By default, per-operation cancellation is disabled for composed operations that use [link asio.reference.experimental__co_composed `experimental::co_composed`]. It must be explicitly enabled by calling the state's `reset_cancellation_state` function.
+By default, terminal per-operation cancellation is enabled for composed operations that use [link asio.reference.experimental__co_composed `experimental::co_composed`]. To disable cancellation for the composed operation, or to alter its supported cancellation types, call the state's `reset_cancellation_state` function.
 
 
 [heading Examples]
@@ -117769,7 +117774,9 @@ Thrown to indicate a failed address conversion.
 
   [
     [[link asio.reference.ip__bad_address_cast.bad_address_cast [*bad_address_cast]] [constructor]]
-    [Default constructor. ]
+    [Default constructor. 
+     [hr]
+     Copy constructor. ]
   ]
   
   [
@@ -117790,10 +117797,27 @@ Thrown to indicate a failed address conversion.
 
 ['Convenience header: ][^asio.hpp]
 
-
 [section:bad_address_cast ip::bad_address_cast::bad_address_cast]
 
 [indexterm2 asio.indexterm.ip__bad_address_cast.bad_address_cast..bad_address_cast..ip::bad_address_cast] 
+Default constructor. 
+
+
+  ``[link asio.reference.ip__bad_address_cast.bad_address_cast.overload1 bad_address_cast]``();
+  ``  [''''&raquo;''' [link asio.reference.ip__bad_address_cast.bad_address_cast.overload1 more...]]``
+
+
+Copy constructor. 
+
+
+  ``[link asio.reference.ip__bad_address_cast.bad_address_cast.overload2 bad_address_cast]``(
+      const bad_address_cast & other);
+  ``  [''''&raquo;''' [link asio.reference.ip__bad_address_cast.bad_address_cast.overload2 more...]]``
+
+
+[section:overload1 ip::bad_address_cast::bad_address_cast (1 of 2 overloads)]
+
+
 Default constructor. 
 
 
@@ -117803,6 +117827,23 @@ Default constructor.
 
 [endsect]
 
+
+
+[section:overload2 ip::bad_address_cast::bad_address_cast (2 of 2 overloads)]
+
+
+Copy constructor. 
+
+
+  bad_address_cast(
+      const bad_address_cast & other);
+
+
+
+[endsect]
+
+
+[endsect]
 
 
 [section:what ip::bad_address_cast::what]

@@ -7,6 +7,9 @@
 *.manifest
 *.pdb
 *.tds
+any_completion_executor
+any_completion_handler
+any_io_executor
 append
 as_tuple
 associated_allocator

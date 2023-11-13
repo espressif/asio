@@ -1711,7 +1711,7 @@
 # include <unistd.h>
 #endif // defined(ASIO_HAS_UNISTD_H)
 
-// Linux: epoll, eventfd and timerfd.
+// Linux: epoll, eventfd, timerfd and io_uring.
 #if defined(__linux__)
 # include <linux/version.h>
 # if !defined(ASIO_HAS_EPOLL)
@@ -1735,6 +1735,11 @@
 #   endif // (__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 8)
 #  endif // defined(ASIO_HAS_EPOLL)
 # endif // !defined(ASIO_HAS_TIMERFD)
+# if defined(ASIO_HAS_IO_URING)
+#  if LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0)
+#   error Linux kernel 5.10 or later is required to support io_uring
+#  endif // LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0)
+# endif // defined(ASIO_HAS_IO_URING)
 #endif // defined(__linux__)
 
 // Linux: io_uring is used instead of epoll.
@@ -2074,7 +2079,7 @@
 # endif // !defined(ASIO_DISABLE_HANDLER_HOOKS)
 #endif // !defined(ASIO_HAS_HANDLER_HOOKS)
 
-// Support for the __thread keyword extension.
+// Support for the __thread keyword extension, or equivalent.
 #if !defined(ASIO_DISABLE_THREAD_KEYWORD_EXTENSION)
 # if defined(__linux__)
 #  if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
@@ -2096,6 +2101,22 @@
 #   define ASIO_THREAD_KEYWORD __declspec(thread)
 #  endif // (_MSC_VER >= 1700)
 # endif // defined(ASIO_MSVC) && defined(ASIO_WINDOWS_RUNTIME)
+# if defined(__APPLE__)
+#  if defined(__clang__)
+#   if defined(__apple_build_version__)
+#    define ASIO_HAS_THREAD_KEYWORD_EXTENSION 1
+#    define ASIO_THREAD_KEYWORD __thread
+#   endif // defined(__apple_build_version__)
+#  endif // defined(__clang__)
+# endif // defined(__APPLE__)
+# if !defined(ASIO_HAS_THREAD_KEYWORD_EXTENSION)
+#  if defined(ASIO_HAS_BOOST_CONFIG)
+#   if !defined(BOOST_NO_CXX11_THREAD_LOCAL)
+#    define ASIO_HAS_THREAD_KEYWORD_EXTENSION 1
+#    define ASIO_THREAD_KEYWORD thread_local
+#   endif // !defined(BOOST_NO_CXX11_THREAD_LOCAL)
+#  endif // defined(ASIO_HAS_BOOST_CONFIG)
+# endif // !defined(ASIO_HAS_THREAD_KEYWORD_EXTENSION)
 #endif // !defined(ASIO_DISABLE_THREAD_KEYWORD_EXTENSION)
 #if !defined(ASIO_THREAD_KEYWORD)
 # define ASIO_THREAD_KEYWORD __thread
